@@ -1,0 +1,47 @@
+[
+  {
+    "title": "Missing security header: Content-Security-Policy",
+    "severity": "Medium",
+    "owasp": "A05:2021 Security Misconfiguration",
+    "mitre": "T1595.002",
+    "evidence": "Header 'Content-Security-Policy' not present in response from http://localhost:3000",
+    "fix": "Add a Content-Security-Policy header to limit which scripts can run.",
+    "source": "Custom scanner"
+  },
+  {
+    "title": "Missing security header: Strict-Transport-Security",
+    "severity": "Medium",
+    "owasp": "A05:2021 Security Misconfiguration",
+    "mitre": "T1595.002",
+    "evidence": "Header 'Strict-Transport-Security' not present in response from http://localhost:3000",
+    "fix": "Add HSTS so browsers always use HTTPS.",
+    "source": "Custom scanner"
+  },
+  {
+    "title": "Exposed path: /ftp",
+    "severity": "Medium",
+    "owasp": "A01:2021 Broken Access Control",
+    "mitre": "T1595.003",
+    "evidence": "http://localhost:3000/ftp returned HTTP 200 with unique content",
+    "fix": "Restrict or remove this path.",
+    "source": "Custom scanner"
+  },
+  {
+    "title": "Exposed path: /robots.txt",
+    "severity": "Medium",
+    "owasp": "A01:2021 Broken Access Control",
+    "mitre": "T1595.003",
+    "evidence": "http://localhost:3000/robots.txt returned HTTP 200 with unique content",
+    "fix": "Restrict or remove this path.",
+    "source": "Custom scanner"
+  },
+  {
+    "title": "Exposed path: /metrics",
+    "severity": "Medium",
+    "owasp": "A01:2021 Broken Access Control",
+    "mitre": "T1595.003",
+    "evidence": "http://localhost:3000/metrics returned HTTP 200 with unique content",
+    "fix": "Restrict or remove this path.",
+    "source": "Custom scanner"
+  }
+]
