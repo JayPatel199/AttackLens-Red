@@ -1,0 +1,78 @@
+
+<html><head><meta charset="utf-8"><title>Security Assessment Report</title>
+<style>
+body{font-family:Arial;max-width:1000px;margin:30px auto;padding:0 20px;color:#222}
+h1{border-bottom:3px solid #8b1a1a;padding-bottom:8px}
+table{border-collapse:collapse;width:100%;margin:15px 0;font-size:13px}
+td,th{border:1px solid #ccc;padding:8px;text-align:left;vertical-align:top}
+th{background:#8b1a1a;color:white}
+.High{color:#c00;font-weight:bold}.Medium{color:#e07b00;font-weight:bold}
+.Low{color:#2a7a2a;font-weight:bold}.Info{color:#555}
+</style></head><body>
+<h1>Web Application Security Assessment</h1>
+<p><b>Target:</b> http://localhost:3000 (OWASP Juice Shop, intentionally vulnerable)<br>
+<b>Date:</b> 2026-10-27<br><b>Tools:</b> custom Python scanner, OWASP ZAP baseline scan</p>
+<h2>Executive Summary</h2>
+<p>The automated assessment found <b>14</b> issues:
+0 High, 7 Medium, 4 Low, 3 Informational.
+Fix the highest severity items first. This report covers automated checks only; manual exploitation is documented separately.</p>
+<h2>Findings</h2>
+<table><tr><th>#</th><th>Severity</th><th>Issue</th><th>OWASP / CWE</th><th>MITRE</th><th>Evidence</th><th>Remediation</th><th>Source</th></tr>
+
+<tr><td>1</td><td class="Medium">Medium</td>
+<td>Missing security header: Content-Security-Policy</td><td>A05:2021 Security Misconfiguration</td><td>T1595.002</td><td>Header 'Content-Security-Policy' not present in response from http://localhost:3000</td>
+<td>Add a Content-Security-Policy header to limit which scripts can run.</td><td>Custom scanner</td></tr>
+
+<tr><td>2</td><td class="Medium">Medium</td>
+<td>Missing security header: Strict-Transport-Security</td><td>A05:2021 Security Misconfiguration</td><td>T1595.002</td><td>Header 'Strict-Transport-Security' not present in response from http://localhost:3000</td>
+<td>Add HSTS so browsers always use HTTPS.</td><td>Custom scanner</td></tr>
+
+<tr><td>3</td><td class="Medium">Medium</td>
+<td>Exposed path: /ftp</td><td>A01:2021 Broken Access Control</td><td>T1595.003</td><td>http://localhost:3000/ftp returned HTTP 200 with unique content</td>
+<td>Restrict or remove this path.</td><td>Custom scanner</td></tr>
+
+<tr><td>4</td><td class="Medium">Medium</td>
+<td>Exposed path: /robots.txt</td><td>A01:2021 Broken Access Control</td><td>T1595.003</td><td>http://localhost:3000/robots.txt returned HTTP 200 with unique content</td>
+<td>Restrict or remove this path.</td><td>Custom scanner</td></tr>
+
+<tr><td>5</td><td class="Medium">Medium</td>
+<td>Exposed path: /metrics</td><td>A01:2021 Broken Access Control</td><td>T1595.003</td><td>http://localhost:3000/metrics returned HTTP 200 with unique content</td>
+<td>Restrict or remove this path.</td><td>Custom scanner</td></tr>
+
+<tr><td>6</td><td class="Medium">Medium</td>
+<td>Content Security Policy (CSP) Header Not Set</td><td>CWE-693</td><td>T1595.002</td><td>Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks, including Cross Site Scripting (XSS) and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a</td>
+<td>Ensure that your web server, application server, load balancer, etc. is configured to set the Content-Security-Policy header.</td><td>OWASP ZAP</td></tr>
+
+<tr><td>7</td><td class="Medium">Medium</td>
+<td>Cross-Domain Misconfiguration</td><td>CWE-264</td><td>T1595.002</td><td>Web browser data loading may be possible, due to a Cross Origin Resource Sharing (CORS) misconfiguration on the web server.</td>
+<td>Ensure that sensitive data is not available in an unauthenticated manner (using IP address white-listing, for instance).Configure the "Access-Control-Allow-Origin" HTTP header to a more restrictive set of domains, or remove all CORS headers entirely, to allow the web browser to enforce the Same Orig</td><td>OWASP ZAP</td></tr>
+
+<tr><td>8</td><td class="Low">Low</td>
+<td>Cross-Origin-Embedder-Policy Header Missing or Invalid</td><td>CWE-693</td><td>T1595.002</td><td>Cross-Origin-Embedder-Policy header is a response header that prevents a document from loading any cross-origin resources that don't explicitly grant the document permission (using CORP or CORS).</td>
+<td>Ensure that the application/web server sets the Cross-Origin-Embedder-Policy header appropriately, and that it sets the Cross-Origin-Embedder-Policy header to 'require-corp' for documents.If possible, ensure that the end user uses a standards-compliant and modern web browser that supports the Cross-</td><td>OWASP ZAP</td></tr>
+
+<tr><td>9</td><td class="Low">Low</td>
+<td>Cross-Origin-Opener-Policy Header Missing or Invalid</td><td>CWE-693</td><td>T1595.002</td><td>Cross-Origin-Opener-Policy header is a response header that allows a site to control if others included documents share the same browsing context. Sharing the same browsing context with untrusted documents might lead to data leak.</td>
+<td>Ensure that the application/web server sets the Cross-Origin-Opener-Policy header appropriately, and that it sets the Cross-Origin-Opener-Policy header to 'same-origin' for documents.'same-origin-allow-popups' is considered as less secured and should be avoided.If possible, ensure that the end user </td><td>OWASP ZAP</td></tr>
+
+<tr><td>10</td><td class="Low">Low</td>
+<td>Dangerous JS Functions</td><td>CWE-749</td><td>T1595.002</td><td>A dangerous JS function seems to be in use that would leave the site vulnerable.</td>
+<td>See the references for security advice on the use of these functions.</td><td>OWASP ZAP</td></tr>
+
+<tr><td>11</td><td class="Low">Low</td>
+<td>Deprecated Feature Policy Header Set</td><td>CWE-16</td><td>T1595.002</td><td>The header has now been renamed to Permissions-Policy.</td>
+<td>Ensure that your web server, application server, load balancer, etc. is configured to set the Permissions-Policy header instead of the Feature-Policy header.</td><td>OWASP ZAP</td></tr>
+
+<tr><td>12</td><td class="Info">Info</td>
+<td>Modern Web Application</td><td>CWE--1</td><td>T1595.002</td><td>The application appears to be a modern web application. If you need to explore it automatically then the Client Spider may well be more effective than the standard one.</td>
+<td>This is an informational alert and so no changes are required.</td><td>OWASP ZAP</td></tr>
+
+<tr><td>13</td><td class="Info">Info</td>
+<td>Storable and Cacheable Content</td><td>CWE-524</td><td>T1595.002</td><td>The response contents are storable by caching components such as proxy servers, and may be retrieved directly from the cache, rather than from the origin server by the caching servers, in response to similar requests from other users. If the response data is sensitive, personal or user-specific, thi</td>
+<td>Validate that the response does not contain sensitive, personal or user-specific information. If it does, consider the use of the following HTTP response headers, to limit, or prevent the content being stored and retrieved from the cache by another user:Cache-Control: no-cache, no-store, must-revali</td><td>OWASP ZAP</td></tr>
+
+<tr><td>14</td><td class="Info">Info</td>
+<td>Storable but Non-Cacheable Content</td><td>CWE-524</td><td>T1595.002</td><td>The response contents are storable by caching components such as proxy servers, but will not be retrieved directly from the cache, without validating the request upstream, in response to similar requests from other users.</td>
+<td></td><td>OWASP ZAP</td></tr>
+</table>
+</body></html>
