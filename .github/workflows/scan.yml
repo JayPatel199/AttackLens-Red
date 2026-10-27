@@ -1,5 +1,3 @@
-cd /workspaces/AttackLens-Red
-cat > .github/workflows/scan.yml << 'EOF'
 name: Security Scan
 on:
   push:
@@ -34,7 +32,3 @@ jobs:
         with:
           name: security-report
           path: reports/
-EOF
-git add .
-git commit -m "Fix Actions workflow: wait properly for Juice Shop to start"
-git push
