@@ -1,0 +1,21 @@
+name: Security Scan
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install requests jinja2
+      - run: docker run -d -p 3000:3000 --name juice bkimminich/juice-shop
+      - run: curl --retry 30 --retry-delay 3 --retry-connrefused -s -o /dev/null http://localhost:3000
+      - run: python scanner.py
+      - run: python report.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: security-report
+          path: reports/
