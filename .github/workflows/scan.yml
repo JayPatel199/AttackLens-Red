@@ -1,3 +1,5 @@
+cd /workspaces/AttackLens-Red
+cat > .github/workflows/scan.yml << 'EOF'
 name: Security Scan
 on:
   push:
@@ -11,11 +13,28 @@ jobs:
         with:
           python-version: "3.11"
       - run: pip install requests jinja2
-      - run: docker run -d -p 3000:3000 --name juice bkimminich/juice-shop
-      - run: curl --retry 30 --retry-delay 3 --retry-connrefused -s -o /dev/null http://localhost:3000
+      - name: Start Juice Shop
+        run: docker run -d -p 3000:3000 --name juice bkimminich/juice-shop
+      - name: Wait for Juice Shop to be ready
+        run: |
+          for i in $(seq 1 40); do
+            if curl -s -o /dev/null -w "%{http_code}" http://localhost:3000 | grep -q 200; then
+              echo "Juice Shop is up"
+              exit 0
+            fi
+            echo "Waiting... ($i)"
+            sleep 5
+          done
+          echo "Juice Shop never became ready"
+          docker logs juice
+          exit 1
       - run: python scanner.py
       - run: python report.py
       - uses: actions/upload-artifact@v4
         with:
           name: security-report
           path: reports/
+EOF
+git add .
+git commit -m "Fix Actions workflow: wait properly for Juice Shop to start"
+git push
