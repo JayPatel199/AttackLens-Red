@@ -41,7 +41,7 @@ th{background:#8b1a1a;color:white}
 </style></head><body>
 <h1>Web Application Security Assessment</h1>
 <p><b>Target:</b> {{ target }} (OWASP Juice Shop, intentionally vulnerable)<br>
-<b>Date:</b> {{ today }}<br><b>Tools:</b> custom Python scanner, OWASP ZAP baseline scan</p>
+<b>Date:</b> {{ today }}<br><b>Analyst:</b> Jay Patel <br><b>Tools:</b> custom Python scanner, OWASP ZAP baseline scan</p>
 <h2>Executive Summary</h2>
 <p>The automated assessment found <b>{{ total }}</b> issues:
 {{ c['High'] }} High, {{ c['Medium'] }} Medium, {{ c['Low'] }} Low, {{ c['Info'] }} Informational.
