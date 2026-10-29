@@ -2,6 +2,9 @@
 
 The offensive counterpart to [AttackLens](https://github.com/JayPatel199/attacklens), my blue-team detection project. This project finds and exploits weaknesses in a deliberately vulnerable web app (OWASP Juice Shop), then documents how each attack would be detected and fixed.
 
+Part of a series: [AttackLens](https://github.com/JayPatel199/attacklens) (detection) · **AttackLens Red** (attack simulation, this repo) · [AttackLens Auto](https://github.com/JayPatel199/AttackLens-Auto) (automation)
+
+
 ## Results at a glance
 - Custom Python scanner with 4 check types (security headers, cookie flags, exposed paths, server banner)
 - OWASP ZAP baseline scan integrated and merged into one severity-ranked HTML report
