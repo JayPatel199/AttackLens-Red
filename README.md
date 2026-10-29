@@ -49,6 +49,6 @@ python report.py
 - MITRE mappings for some web findings are my own judgment
 
 ## What I learned
-(Write 3 lines in your own words: what a missing header means, why exploitation proves a finding, how detection and attack connect.)
+A missing security header doesn't guarantee an attack will succeed, but it removes a layer of defense a browser would otherwise provide automatically. Manual exploitation matters because an automated scanner only flags a *possible* weakness; actually logging in with a SQL injection payload proves it's real and shows its full impact. Detection and attack are two sides of the same coin: every exploit I performed here has a matching log signature that AttackLens (my blue-team project) could be trained to catch.
 
 Author: Jay Patel
